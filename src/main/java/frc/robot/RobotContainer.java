@@ -35,7 +35,9 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController manip = new CommandXboxController(1);
 
+    public final StateManager stateManager = new StateManager();
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     private SendableChooser<Command> autoChooser;
@@ -80,6 +82,11 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+
+        manip.a().onTrue(stateManager.goToBase());
+        manip.y().onTrue(stateManager.goToExtend());
+        manip.x().onTrue(stateManager.goToMid());
     }
 
     public Command getAutonomousCommand() {
