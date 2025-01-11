@@ -8,18 +8,22 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Pivot;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -35,14 +39,21 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-    private final CommandXboxController manip = new CommandXboxController(1);
+    private final Joystick manip = new Joystick(1);
+    private final JoystickButton click = new JoystickButton(manip, 1);
 
     public final StateManager stateManager = new StateManager();
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain;
+    public final Pivot s_pivot;
 
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        s_pivot = new Pivot();
+        NamedCommands.registerCommand("startPivot", s_pivot.startRotating());
+
+        drivetrain = TunerConstants.createDrivetrain();
+
         try {
             autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -51,6 +62,7 @@ public class RobotContainer {
             DriverStation.reportError("AutoBuilder not made", ex.getStackTrace());
             autoChooser = null;
         }
+
         configureBindings();
     }
 
@@ -84,9 +96,11 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
 
-        manip.a().onTrue(stateManager.goToBase());
-        manip.y().onTrue(stateManager.goToExtend());
-        manip.x().onTrue(stateManager.goToMid());
+        // manip.a().onTrue(stateManager.goToBase());
+        // manip.y().onTrue(stateManager.goToExtend());
+        // manip.x().onTrue(stateManager.goToMid());
+
+        click.onTrue(s_pivot.startRotating());
     }
 
     public Command getAutonomousCommand() {
