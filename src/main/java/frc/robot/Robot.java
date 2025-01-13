@@ -14,9 +14,9 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
+  limeLight m_limeLight = new limeLight();
   public Robot() {
     m_robotContainer = new RobotContainer();
-    limeLight m_limeLight = new limeLight();
   }
 
   @Override
@@ -53,6 +53,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_limeLight.setPipeLine();
+    m_robotContainer.limeActivation();
   }
 
   @Override

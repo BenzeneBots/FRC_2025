@@ -18,7 +18,7 @@ public class limeLight extends SubsystemBase {
    //SmartDashboard.putData(i, pipeLineNumber);
    // }
     public limeLight() {
-        limeLightTable = NetworkTableInstance.getDefault().getTable("limeLightTable");
+        limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
     // if this method returns 1 then the target exists
     public double targetExistance() {
@@ -35,6 +35,7 @@ public class limeLight extends SubsystemBase {
     {
        limeLightTable.getEntry("pipeline").setNumber(1);
     }
+    
     public double Allignment(){
         return limeLightTable.getEntry("tx").getDouble(0);
     }

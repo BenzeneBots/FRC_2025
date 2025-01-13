@@ -17,13 +17,17 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Alignment;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.limeLight;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -39,12 +43,15 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    Trigger limeButton = joystick.x();
     private final Joystick manip = new Joystick(1);
     private final JoystickButton click = new JoystickButton(manip, 1);
 
     public final StateManager stateManager = new StateManager();
     public final CommandSwerveDrivetrain drivetrain;
     public final Pivot s_pivot;
+    limeLight m_limeLight = new limeLight();
+    Alignment m_Alignment = new Alignment();
 
     private SendableChooser<Command> autoChooser;
 
@@ -109,6 +116,16 @@ public class RobotContainer {
         } else {
             return null;
         }
+    }
+    public Command limeActivation(){
+        if(limeButton.getAsBoolean()){
+            return new InstantCommand(() -> m_Alignment.move());
+
+        } else {
+            return null;
+        }
+        
+  
     }
     //alvin
 }
