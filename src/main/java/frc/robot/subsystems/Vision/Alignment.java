@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Telemetry;
 
@@ -10,9 +11,11 @@ limeLight m_limeLight = new limeLight();
 private Telemetry m_telemetry;
 double tx =  m_limeLight.horizontalOfset();
 double ta =  m_limeLight.distanceAway();
+double ty = m_limeLight.verticalOffset();
+double rotation;
 
 double distanceThreshold = 0.5;
-
+private Pose2d pose2d;
 public Alignment(){
 
 }
@@ -29,14 +32,20 @@ public void move(){
     }
 
 
- //  for (int i = 0; i < 4; ++i) {
- //      m_moduleSpeeds[i].setAngle(state.ModuleStates[i].angle);
- //      m_moduleDirections[i].setAngle(state.ModuleStates[i].angle);
- //      m_moduleSpeeds[i].setLength(state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed));
-
- //  
- //  }
-
 }
+    //figure out how the offsets work i.e rotation calculation and direction
+    public void initialize(){
+        pose2d = new Pose2d(pose2d.getX() + tx, pose2d.getY() +ta, pose2d.getRotation());
+    }
+    public void execute(){
+
+        // use setControl coupled with swerve request to actually move the robot to desire position
+        // do research on setControl implementation
+    }
+    //male sure to include @Override
+    public void isFinished(){
+        // add a threshold tolerance so that when the robot is within a certain distance
+        // away from the april tag this method gets called to finish the allignment
+    }
 
 }
