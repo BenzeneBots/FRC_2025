@@ -8,7 +8,7 @@ import frc.robot.Telemetry;
 public class Alignment extends SubsystemBase {
 limeLight m_limeLight = new limeLight();
 private Telemetry m_telemetry;
-double tx =  m_limeLight.Allignment();
+double tx =  m_limeLight.horizontalOfset();
 double ta =  m_limeLight.distanceAway();
 
 double distanceThreshold = 0.5;
