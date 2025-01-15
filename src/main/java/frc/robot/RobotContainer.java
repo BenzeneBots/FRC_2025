@@ -84,6 +84,8 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRawAxis(2) * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
+        //joystick.x().whileTrue(drivetrain.applyRequest(() -> m_Alignment));
+
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -117,15 +119,15 @@ public class RobotContainer {
             return null;
         }
     }
-    public Command limeActivation(){
-        if(limeButton.getAsBoolean()){
-            return new InstantCommand(() -> m_Alignment.move());
+   //public Command limeActivation(){
+   //    if(limeButton.getAsBoolean()){
+   //        return new InstantCommand(() -> m_Alignment.move());
 
-        } else {
-            return null;
-        }
-        
+   //    } else {
+   //        return null;
+   //    }
+   //    
   
-    }
-    //alvin
+   //}
+   ////alvin
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Vision;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Telemetry;
@@ -9,43 +11,55 @@ import frc.robot.Telemetry;
 public class Alignment extends SubsystemBase {
 limeLight m_limeLight = new limeLight();
 private Telemetry m_telemetry;
-double tx =  m_limeLight.horizontalOfset();
-double ta =  m_limeLight.distanceAway();
-double ty = m_limeLight.verticalOffset();
+private Pose2d pose2d;
+
+double tx;
+double ta;
+double ty;
+double tv;
 double rotation;
 
-double distanceThreshold = 0.5;
-private Pose2d pose2d;
+double velocityXOffset;
+double velocityZOffset;
+double  zero;
+
+double finishedDistanceThreshold;
+double finishedXThreshold;
+
+
+//private final SwerveRequest.RobotCentric m_limeRequest;
+
 public Alignment(){
+}
+public void updatePosition(){
+    tx = m_limeLight.horizontalOfset();
+    ta = m_limeLight.distanceAway();
+    tv = m_limeLight.targetExistance();
+}
+public  void move(){
+   if (tv == 1){
+    if (tx == 0){
+        velocityXOffset = 0;
+    } else if(tx>0.2){
+        velocityXOffset =1;
+    } else {
+        velocityXOffset = -1;
+    }
+
+    if (ta==80){
+        velocityZOffset = 0;
+    } else if (ta<20){
+        velocityZOffset= 1;
+    } else{
+        velocityZOffset = -1;
+    }
+
+    zero = 0;
+
+    } else {
+        velocityXOffset =0;
+        velocityZOffset = 0;
+    } 
 
 }
-public void move(){
-    if (tx>distanceThreshold){
-        //move left
-    } else{
-        //move right
-    }
-    if (ta>1){
-        //forward
-    } else{
-        //backward
-    }
-
-
-}
-    //figure out how the offsets work i.e rotation calculation and direction
-    public void initialize(){
-        pose2d = new Pose2d(pose2d.getX() + tx, pose2d.getY() +ta, pose2d.getRotation());
-    }
-    public void execute(){
-
-        // use setControl coupled with swerve request to actually move the robot to desire position
-        // do research on setControl implementation
-    }
-    //male sure to include @Override
-    public void isFinished(){
-        // add a threshold tolerance so that when the robot is within a certain distance
-        // away from the april tag this method gets called to finish the allignment
-    }
-
 }
