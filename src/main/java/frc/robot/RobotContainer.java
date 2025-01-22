@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.IntakePivot;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -40,18 +39,20 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final Joystick manip = new Joystick(1);
-    private final JoystickButton click = new JoystickButton(manip, 1);
 
-    public final StateManager stateManager = new StateManager();
+    // Buttons
+    private final JoystickButton humanPlayerButton = new JoystickButton(manip, 1);
+    private final JoystickButton level1Button = new JoystickButton(manip, 2);
+    private final JoystickButton stowButton = new JoystickButton(manip, 3);
+    private final JoystickButton level2Button = new JoystickButton(manip, 4);
+
     public final CommandSwerveDrivetrain drivetrain;
-    public final Pivot s_pivot;
+    private final IntakePivot s_IntakePivot;
 
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        s_pivot = new Pivot();
-        NamedCommands.registerCommand("startPivot", s_pivot.startRotating());
-
+        s_IntakePivot = new IntakePivot();
         drivetrain = TunerConstants.createDrivetrain();
 
         try {
@@ -94,13 +95,11 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
-
-        // manip.a().onTrue(stateManager.goToBase());
-        // manip.y().onTrue(stateManager.goToExtend());
-        // manip.x().onTrue(stateManager.goToMid());
-
-        click.onTrue(s_pivot.startRotating());
+        
+        stowButton.onTrue(s_IntakePivot.stowPivot());
+        humanPlayerButton.onTrue(s_IntakePivot.humanPlayer());
+        level2Button.onTrue(s_IntakePivot.level2());
+        level1Button.onTrue(s_IntakePivot.level1());
     }
 
     public Command getAutonomousCommand() {

@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coralThreeWithAlgaeStart"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LevelOne"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coralThreeWithAlgaeHPS"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeHumanPlayerStation"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coralThreeWithAlgaeTA"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "coralThreeWithAlgaeTR"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Init Auto",
+  "choreoAuto": false
+}
