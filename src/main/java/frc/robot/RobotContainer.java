@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakePivot;
+import frc.robot.subsystems.IntakeSpinner;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -41,18 +42,24 @@ public class RobotContainer {
     private final Joystick manip = new Joystick(1);
 
     // Buttons
-    private final JoystickButton humanPlayerButton = new JoystickButton(manip, 1);
-    private final JoystickButton level1Button = new JoystickButton(manip, 2);
-    private final JoystickButton stowButton = new JoystickButton(manip, 3);
-    private final JoystickButton level2Button = new JoystickButton(manip, 4);
+    private final JoystickButton stowButton = new JoystickButton(manip, 1);
+    private final JoystickButton humanPlayerButton = new JoystickButton(manip, 2);
+
+    private final JoystickButton up = new JoystickButton(manip, 9);
+    private final JoystickButton down = new JoystickButton(manip, 10);
+
+    private final JoystickButton in = new JoystickButton(manip, 7);
+    private final JoystickButton out = new JoystickButton(manip, 8);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final IntakePivot s_IntakePivot;
+    private final IntakeSpinner s_IntakeSpinner;
 
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         s_IntakePivot = new IntakePivot();
+        s_IntakeSpinner = new IntakeSpinner();
         drivetrain = TunerConstants.createDrivetrain();
 
         try {
@@ -96,10 +103,19 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
         
+        // Coral Pivot
         stowButton.onTrue(s_IntakePivot.stowPivot());
         humanPlayerButton.onTrue(s_IntakePivot.humanPlayer());
-        level2Button.onTrue(s_IntakePivot.level2());
-        level1Button.onTrue(s_IntakePivot.level1());
+        up.whileTrue(s_IntakePivot.up());
+        down.whileTrue(s_IntakePivot.down());
+
+        // Coral Spinner
+        in.whileTrue(s_IntakeSpinner.intake());
+        out.whileTrue(s_IntakeSpinner.outtake());
+    }
+
+    public void zeroComponents() {
+        s_IntakePivot.zeroMotor();
     }
 
     public Command getAutonomousCommand() {

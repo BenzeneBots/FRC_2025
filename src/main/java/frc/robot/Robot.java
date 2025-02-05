@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.zeroComponents();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -56,9 +57,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // SmartDashboard.putNumber("Gyro Yaw", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble());
-    // SmartDashboard.putNumber("Gyro Pitch", m_robotContainer.drivetrain.getPigeon2().getPitch().getValueAsDouble());
-    // SmartDashboard.putNumber("Gyro Roll", m_robotContainer.drivetrain.getPigeon2().getRoll().getValueAsDouble());
   }
 
   @Override
