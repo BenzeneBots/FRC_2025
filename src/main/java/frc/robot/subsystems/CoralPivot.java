@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.RobotConstants.IntakePivotConstants;
 
-public class IntakePivot extends SubsystemBase {
+public class CoralPivot extends SubsystemBase {
     private final TalonFX pivotMotor;
     private final MotionMagicVoltage controller;
 
-    public IntakePivot() {
-        pivotMotor = new TalonFX(60);
+    public CoralPivot() {
+        pivotMotor = new TalonFX(60, "BB_CANIVORE");
         configMotor();
         controller = new MotionMagicVoltage(0);
     }
@@ -58,7 +58,7 @@ public class IntakePivot extends SubsystemBase {
             @Override
             public void end(boolean interrupted) {
                 pivotMotor.stopMotor();
-                // pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
+                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
             }
         };
     }
@@ -73,7 +73,7 @@ public class IntakePivot extends SubsystemBase {
             @Override
             public void end(boolean interrupted) {
                 pivotMotor.stopMotor();
-                // pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
+                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
             }
         };
     }
