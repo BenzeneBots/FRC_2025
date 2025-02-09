@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,17 +16,17 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Vision.Alignment;
+import frc.robot.subsystems.AlgaePivot;
+import frc.robot.subsystems.AlgaeSpinner;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Vision.limeLight;
+import frc.robot.subsystems.CoralPivot;
+import frc.robot.subsystems.CoralSpinner;
+import frc.robot.subsystems.Commands.humanPlayerCommand;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -43,21 +42,33 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-    Trigger limeButton = joystick.x();
     private final Joystick manip = new Joystick(1);
-    private final JoystickButton click = new JoystickButton(manip, 1);
 
-    public final StateManager stateManager = new StateManager();
+    private final JoystickButton coral_up = new JoystickButton(manip, 1);
+    private final JoystickButton coral_down = new JoystickButton(manip, 2);
+    private final JoystickButton coral_in = new JoystickButton(manip, 3);
+    private final JoystickButton coral_out = new JoystickButton(manip, 4);
+
+    private final JoystickButton humanPlayer = new JoystickButton(manip, 5);
+
+    private final JoystickButton algae_up = new JoystickButton(manip, 9);
+    private final JoystickButton algae_down = new JoystickButton(manip, 10);
+    private final JoystickButton algae_in = new JoystickButton(manip, 7);
+    private final JoystickButton algae_out = new JoystickButton(manip, 8);
+
     public final CommandSwerveDrivetrain drivetrain;
-    public final Pivot s_pivot;
-    limeLight m_limeLight = new limeLight();
-    Alignment m_Alignment = new Alignment();
+    private final CoralPivot s_CoralPivot;
+    private final CoralSpinner s_CoralSpinner;
+    private final AlgaePivot s_AlgaePivot;
+    private final AlgaeSpinner s_AlgaeSpinner;
 
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        s_pivot = new Pivot();
-        NamedCommands.registerCommand("startPivot", s_pivot.startRotating());
+        s_CoralPivot = new CoralPivot();
+        s_CoralSpinner = new CoralSpinner();
+        s_AlgaePivot = new AlgaePivot();
+        s_AlgaeSpinner = new AlgaeSpinner();
 
         drivetrain = TunerConstants.createDrivetrain();
 
@@ -84,8 +95,6 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRawAxis(2) * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-        //joystick.x().whileTrue(drivetrain.applyRequest(() -> m_Alignment));
-
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -103,13 +112,28 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+        
+        humanPlayer.whileTrue(new humanPlayerCommand(s_CoralPivot));
 
+        // Coral Pivot
+        coral_up.whileTrue(s_CoralPivot.up());
+        coral_down.whileTrue(s_CoralPivot.down());
 
-        // manip.a().onTrue(stateManager.goToBase());
-        // manip.y().onTrue(stateManager.goToExtend());
-        // manip.x().onTrue(stateManager.goToMid());
+        // Coral Spinner
+        coral_in.whileTrue(s_CoralSpinner.intake());
+        coral_out.whileTrue(s_CoralSpinner.outtake());
 
-        click.onTrue(s_pivot.startRotating());
+        // Algae Pivot
+        algae_up.whileTrue(s_AlgaePivot.up());
+        algae_down.whileTrue(s_AlgaePivot.down());
+
+        // Algae Spinner
+        //algae_in.whileTrue(s_AlgaeSpinner.intake());
+       // algae_out.whileTrue(s_AlgaeSpinner.outtake());
+    }
+
+    public void zeroComponents() {
+        s_CoralPivot.zeroMotor();
     }
 
     public Command getAutonomousCommand() {
@@ -119,15 +143,4 @@ public class RobotContainer {
             return null;
         }
     }
-   //public Command limeActivation(){
-   //    if(limeButton.getAsBoolean()){
-   //        return new InstantCommand(() -> m_Alignment.move());
-
-   //    } else {
-   //        return null;
-   //    }
-   //    
-  
-   //}
-   ////alvin
 }
