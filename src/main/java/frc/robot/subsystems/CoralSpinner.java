@@ -28,9 +28,23 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(-0.5);
+                spinner.set(-1.0);
             }
             
+            @Override
+            public void end(boolean interrupted) {
+                spinner.stopMotor();
+            }
+        };
+    }
+
+    public Command level1() {
+        return new Command() {
+            @Override
+            public void execute() {
+                spinner.set(-0.25);
+            }
+
             @Override
             public void end(boolean interrupted) {
                 spinner.stopMotor();

@@ -1,40 +1,39 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class AlgaeSpinner extends SubsystemBase {
-    private final SparkFlex spinner = new SparkFlex(23, MotorType.kBrushless);
-    
-    public AlgaeSpinner() {} 
+public class Climber extends SubsystemBase {
+    private final TalonFX climbMotor = new TalonFX(46); 
 
-    public Command intake() {
+    public Climber() {}
+
+    public Command up() {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(-0.5);
+                climbMotor.set(1.0);
             }
 
             @Override
             public void end(boolean interrupted) {
-                spinner.stopMotor();
+                climbMotor.stopMotor();
             }
         };
     }
 
-    public Command outtake() {
+    public Command down() {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(0.5);
+                climbMotor.set(-1.0);
             }
 
             @Override
             public void end(boolean interrupted) {
-                spinner.stopMotor();
+                climbMotor.stopMotor();
             }
         };
     }

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaePivot;
 import frc.robot.subsystems.AlgaeSpinner;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.CoralSpinner;
@@ -33,7 +34,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 20% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -42,22 +43,31 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final Joystick manip = new Joystick(1);
+    private final Joystick test = new Joystick(2);
 
-    private final JoystickButton coral_up = new JoystickButton(manip, 1);
-    private final JoystickButton coral_down = new JoystickButton(manip, 2);
-    private final JoystickButton coral_in = new JoystickButton(manip, 3);
+    private final JoystickButton coral_up = new JoystickButton(manip, 8);
+    private final JoystickButton coral_down = new JoystickButton(manip, 7);
+    private final JoystickButton coral_slow_up = new JoystickButton(manip, 10);
+    private final JoystickButton coral_slow_down = new JoystickButton(manip, 9);
+    private final JoystickButton coral_in = new JoystickButton(manip, 1);
     private final JoystickButton coral_out = new JoystickButton(manip, 4);
+    private final JoystickButton level_1 = new JoystickButton(manip, 14);
 
-    private final JoystickButton algae_up = new JoystickButton(manip, 9);
-    private final JoystickButton algae_down = new JoystickButton(manip, 10);
-    private final JoystickButton algae_in = new JoystickButton(manip, 7);
-    private final JoystickButton algae_out = new JoystickButton(manip, 8);
+    private final JoystickButton algae_up = new JoystickButton(manip, 6);
+    private final JoystickButton algae_down = new JoystickButton(manip, 5);
+    private final JoystickButton algae_in = new JoystickButton(manip, 2);
+    private final JoystickButton algae_out = new JoystickButton(manip, 3);
+
+    private final JoystickButton climb_up = new JoystickButton(test, 10);
+    private final JoystickButton climb_down = new JoystickButton(test, 9);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
     private final CoralSpinner s_CoralSpinner;
     private final AlgaePivot s_AlgaePivot;
     private final AlgaeSpinner s_AlgaeSpinner;
+    
+    private final Climber s_Climber;
 
     private SendableChooser<Command> autoChooser;
 
@@ -66,6 +76,8 @@ public class RobotContainer {
         s_CoralSpinner = new CoralSpinner();
         s_AlgaePivot = new AlgaePivot();
         s_AlgaeSpinner = new AlgaeSpinner();
+
+        s_Climber = new Climber();
 
         drivetrain = TunerConstants.createDrivetrain();
 
@@ -109,14 +121,17 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-        
+
         // Coral Pivot
         coral_up.whileTrue(s_CoralPivot.up());
         coral_down.whileTrue(s_CoralPivot.down());
+        coral_slow_up.whileTrue(s_CoralPivot.slowUp());
+        coral_slow_down.whileTrue(s_CoralPivot.slowDown());
 
         // Coral Spinner
         coral_in.whileTrue(s_CoralSpinner.intake());
         coral_out.whileTrue(s_CoralSpinner.outtake());
+        level_1.whileTrue(s_CoralSpinner.level1()); 
 
         // Algae Pivot
         algae_up.whileTrue(s_AlgaePivot.up());
@@ -125,6 +140,9 @@ public class RobotContainer {
         // Algae Spinner
         algae_in.whileTrue(s_AlgaeSpinner.intake());
         algae_out.whileTrue(s_AlgaeSpinner.outtake());
+
+        climb_up.whileTrue(s_Climber.up());
+        climb_down.whileTrue(s_Climber.down());
     }
 
     public void zeroComponents() {

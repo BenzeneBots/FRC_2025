@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
@@ -13,12 +13,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralPivot extends SubsystemBase {
     private final TalonFX pivotMotor;
-    private final MotionMagicVoltage controller;
+    private final PositionDutyCycle controller;
 
     public CoralPivot() {
         pivotMotor = new TalonFX(60, "BB_CANIVORE");
         configMotor();
-        controller = new MotionMagicVoltage(0);
+        // controller = new MotionMagicVoltage(0);
+        controller = new PositionDutyCycle(0);
     }
 
     public void zeroMotor() {
@@ -35,10 +36,10 @@ public class CoralPivot extends SubsystemBase {
         config.Slot0.kI = 0;
         config.Slot0.kG = 0.5;
 
-        var motionMagicConfigs = config.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 80;
-        motionMagicConfigs.MotionMagicAcceleration = 160;
-        motionMagicConfigs.MotionMagicJerk = 1600;
+        // var motionMagicConfigs = config.MotionMagic;
+        // motionMagicConfigs.MotionMagicCruiseVelocity = 80;
+        // motionMagicConfigs.MotionMagicAcceleration = 160;
+        // motionMagicConfigs.MotionMagicJerk = 1600;
 
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
@@ -49,6 +50,36 @@ public class CoralPivot extends SubsystemBase {
     }
 
     public Command up() {
+        return new Command() {
+            @Override
+            public void execute() {
+                pivotMotor.set(0.3);
+            }
+
+            @Override
+            public void end(boolean interrupted) {
+                pivotMotor.stopMotor();
+                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
+            }
+        };
+    }
+
+    public Command down() {
+        return new Command() {
+            @Override
+            public void execute() {
+                pivotMotor.set(-0.3);
+            }
+
+            @Override
+            public void end(boolean interrupted) {
+                pivotMotor.stopMotor();
+                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
+            }
+        };
+    }
+
+    public Command slowUp() {
         return new Command() {
             @Override
             public void execute() {
@@ -63,7 +94,7 @@ public class CoralPivot extends SubsystemBase {
         };
     }
 
-    public Command down() {
+    public Command slowDown() {
         return new Command() {
             @Override
             public void execute() {
@@ -82,7 +113,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.setControl(controller.withSlot(0).withPosition(5));
+                pivotMotor.setControl(controller.withSlot(0).withPosition(0));
             }
         };
     }
@@ -91,7 +122,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.setControl(controller.withSlot(0).withPosition(10));
+                pivotMotor.setControl(controller.withSlot(0).withPosition(5));
             }
         };
     }
