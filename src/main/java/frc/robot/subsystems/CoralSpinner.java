@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotConstants.IntakeSpinnerConstants;
 
 public class CoralSpinner extends SubsystemBase {
     private final TalonFX spinner = new TalonFX(56, "BB_CANIVORE");
@@ -14,7 +15,7 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(0.5);
+                spinner.set(IntakeSpinnerConstants.intakeSpeed);
             }
             
             @Override
@@ -28,7 +29,7 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(-1.0);
+                spinner.set(IntakeSpinnerConstants.outtakeSpeed);
             }
             
             @Override
@@ -42,7 +43,7 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(-0.25);
+                spinner.set(IntakeSpinnerConstants.level1Speed);
             }
 
             @Override
@@ -51,5 +52,4 @@ public class CoralSpinner extends SubsystemBase {
             }
         };
     }
-    
 }

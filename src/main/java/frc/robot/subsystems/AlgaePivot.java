@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotConstants.AlgaePivotConstants;
 
 public class AlgaePivot extends SubsystemBase {
     private final TalonFX pivotMotor;
@@ -46,7 +47,7 @@ public class AlgaePivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(0.1);
+                pivotMotor.set(AlgaePivotConstants.speed);
             }
 
             @Override
@@ -61,7 +62,7 @@ public class AlgaePivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(-0.1);
+                pivotMotor.set(-AlgaePivotConstants.speed);
             }
 
             @Override

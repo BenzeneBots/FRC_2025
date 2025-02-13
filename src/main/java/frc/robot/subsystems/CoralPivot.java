@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -9,7 +8,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.RobotConstants.IntakePivotConstants;
+import frc.robot.RobotConstants.IntakePivotConstants;
 
 public class CoralPivot extends SubsystemBase {
     private final TalonFX pivotMotor;
@@ -53,7 +52,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(0.3);
+                pivotMotor.set(IntakePivotConstants.speed);
             }
 
             @Override
@@ -68,7 +67,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(-0.3);
+                pivotMotor.set(-IntakePivotConstants.speed);
             }
 
             @Override
@@ -83,7 +82,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(0.1);
+                pivotMotor.set(IntakePivotConstants.slowSpeed);
             }
 
             @Override
@@ -98,7 +97,7 @@ public class CoralPivot extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                pivotMotor.set(-0.1);
+                pivotMotor.set(-IntakePivotConstants.slowSpeed);
             }
 
             @Override
