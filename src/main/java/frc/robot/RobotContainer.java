@@ -61,6 +61,12 @@ public class RobotContainer {
     private final JoystickButton climb_up = new JoystickButton(test, 10);
     private final JoystickButton climb_down = new JoystickButton(test, 9);
 
+    // Testing
+    private final JoystickButton humanPlayer = new JoystickButton(test, 1);
+    private final JoystickButton level1 = new JoystickButton(test, 3);
+    private final JoystickButton level2 = new JoystickButton(test, 4);
+    private final JoystickButton stow = new JoystickButton(test, 2);
+
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
     private final CoralSpinner s_CoralSpinner;
@@ -143,6 +149,11 @@ public class RobotContainer {
 
         climb_up.whileTrue(s_Climber.up());
         climb_down.whileTrue(s_Climber.down());
+
+        humanPlayer.onTrue(s_CoralPivot.humanPlayerStation());
+        level1.onTrue(s_CoralPivot.level1());
+        level2.onTrue(s_CoralPivot.level2());
+        stow.onTrue(s_CoralPivot.stowPivot());
     }
 
     public void zeroComponents() {

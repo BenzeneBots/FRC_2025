@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,9 +31,9 @@ public class CoralPivot extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.Slot0.kP = 0;
-        config.Slot0.kD = 0;
-        config.Slot0.kI = 0;
+        config.Slot0.kP = 0.5;
+        config.Slot0.kD = 0.0;
+        config.Slot0.kI = 0.5;
         config.Slot0.kG = 0.5;
 
         // var motionMagicConfigs = config.MotionMagic;
@@ -109,19 +110,39 @@ public class CoralPivot extends SubsystemBase {
     }
 
     public Command stowPivot() {
-        return new Command() {
-            @Override
-            public void execute() {
-                pivotMotor.setControl(controller.withSlot(0).withPosition(0));
-            }
-        };
+        return setPosition(0);
     }
 
-    public Command humanPlayer() {
+    public Command level2() {
+        return setPosition(IntakePivotConstants.level2);
+    }
+
+    public Command level1() {
+        return setPosition(IntakePivotConstants.level1);
+    }
+
+    public Command humanPlayerStation() {
+        return setPosition(IntakePivotConstants.humanPlayer);
+    }
+
+    public Command setPosition(double position) {
         return new Command() {
+            Timer timer = new Timer();
+            @Override
+            public void initialize() {
+                // TODO Auto-generated method stub
+                super.initialize();
+                timer.start();
+            }
+
             @Override
             public void execute() {
-                pivotMotor.setControl(controller.withSlot(0).withPosition(5));
+                pivotMotor.setControl(controller.withVelocity(0.5).withPosition(position));
+            }
+
+            @Override
+            public boolean isFinished() {
+                return timer.get() > 1.0;
             }
         };
     }

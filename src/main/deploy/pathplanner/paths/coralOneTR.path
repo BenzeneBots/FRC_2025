@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.509,
-        "y": 7.07
+        "x": 1.45,
+        "y": 7.15
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.293717948717948,
-        "y": 6.398717948717949
+        "x": 2.2347194315742103,
+        "y": 6.478719682157006
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.5941025641025637,
-        "y": 5.500833333333333
+        "x": 3.7976250000000005,
+        "y": 5.155999999999999
       },
       "prevControl": {
-        "x": 2.6962179487179485,
-        "y": 6.1303846153846155
+        "x": 2.8997403846153853,
+        "y": 5.785551282051282
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -57.38075692880721
+    "rotation": -60.03781590358221
   },
   "reversed": false,
   "folder": "coralOne",

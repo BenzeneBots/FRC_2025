@@ -3,10 +3,12 @@ package frc.robot;
 public class RobotConstants {
     public static class IntakePivotConstants {
         public static final double stowPos = 0;
-        public static final double humanPlayer = 29;
+        public static final double humanPlayer = 27;
+        public static final double level1 = 47;
+        public static final double level2 = 43;
 
         public static final double speed = 0.3;
-        public static final double slowSpeed = 0.3;
+        public static final double slowSpeed = 0.1;
     }
 
     public static class IntakeSpinnerConstants {
