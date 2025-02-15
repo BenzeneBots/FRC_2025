@@ -45,6 +45,7 @@ public class RobotContainer {
     private final Joystick manip = new Joystick(1);
     private final Joystick test = new Joystick(2);
 
+    // ALVIN YOU DON'T NEED THESE BUTTONS ANYMORE SINCE YOU HAVE THE PositionDutyCycle Controller
     private final JoystickButton coral_up = new JoystickButton(manip, 8);
     private final JoystickButton coral_down = new JoystickButton(manip, 7);
     private final JoystickButton coral_slow_up = new JoystickButton(manip, 10);
@@ -61,11 +62,16 @@ public class RobotContainer {
     private final JoystickButton climb_up = new JoystickButton(test, 10);
     private final JoystickButton climb_down = new JoystickButton(test, 9);
 
-    // Testing
+    // ALVIN CHANGE THESE BUTTONS TO MANIP CONTROLLER, NOT TEST
     private final JoystickButton humanPlayer = new JoystickButton(test, 1);
     private final JoystickButton level1 = new JoystickButton(test, 3);
     private final JoystickButton level2 = new JoystickButton(test, 4);
     private final JoystickButton stow = new JoystickButton(test, 2);
+
+    // ALVIN ACTUALLY FIND BUTTON NUMBERS FOR THESE, I JUST COPIED THESE FROM THE ALGAE STUFF
+    private final JoystickButton algaeStow = new JoystickButton(test, 3);
+    private final JoystickButton algaeScore = new JoystickButton(test, 4);
+    private final JoystickButton algaeDeploy = new JoystickButton(test, 2);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
@@ -129,19 +135,22 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // Coral Pivot
+        // YOU DON'T NEED ANY OF THESE
         coral_up.whileTrue(s_CoralPivot.up());
         coral_down.whileTrue(s_CoralPivot.down());
         coral_slow_up.whileTrue(s_CoralPivot.slowUp());
         coral_slow_down.whileTrue(s_CoralPivot.slowDown());
+
+        // Algae Pivot
+        // YOU DON'T NEED ANY OF THESE
+        algae_up.whileTrue(s_AlgaePivot.up());
+        algae_down.whileTrue(s_AlgaePivot.down());
 
         // Coral Spinner
         coral_in.whileTrue(s_CoralSpinner.intake());
         coral_out.whileTrue(s_CoralSpinner.outtake());
         level_1.whileTrue(s_CoralSpinner.level1()); 
 
-        // Algae Pivot
-        algae_up.whileTrue(s_AlgaePivot.up());
-        algae_down.whileTrue(s_AlgaePivot.down());
 
         // Algae Spinner
         algae_in.whileTrue(s_AlgaeSpinner.intake());
@@ -150,10 +159,17 @@ public class RobotContainer {
         climb_up.whileTrue(s_Climber.up());
         climb_down.whileTrue(s_Climber.down());
 
+        // THIS IS THE GOOD STUFF
+        // CORAL
         humanPlayer.onTrue(s_CoralPivot.humanPlayerStation());
         level1.onTrue(s_CoralPivot.level1());
         level2.onTrue(s_CoralPivot.level2());
         stow.onTrue(s_CoralPivot.stowPivot());
+
+        // ALGAE
+        algaeStow.onTrue(s_AlgaePivot.stowPivot());
+        algaeDeploy.onTrue(s_AlgaePivot.deploy());
+        algaeScore.onTrue(s_AlgaePivot.score());
     }
 
     public void zeroComponents() {

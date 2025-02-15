@@ -2,6 +2,7 @@ package frc.robot;
 
 public class RobotConstants {
     public static class IntakePivotConstants {
+        // ALVIN ACTUALLY FIND THESE VALUES
         public static final double stowPos = 0;
         public static final double humanPlayer = 27;
         public static final double level1 = 47;
@@ -19,6 +20,11 @@ public class RobotConstants {
 
     public static class AlgaePivotConstants {
         public static final double speed = 0.1;
+
+        // ALVIN ACTUALLY FIND THESE VALUES
+        public static final double stowPos = 0;
+        public static final double deployed = 0;
+        public static final double score = 0;
     }
 
     public static class AlgaeSpinnerConstants {
