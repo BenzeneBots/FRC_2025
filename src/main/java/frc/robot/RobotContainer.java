@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.CoralSpinner;
+import frc.robot.subsystems.Elevator;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -59,6 +61,9 @@ public class RobotContainer {
     private final JoystickButton algae_in = new JoystickButton(manip, 2);
     private final JoystickButton algae_out = new JoystickButton(manip, 3);
 
+    private final JoystickButton elevator_up = new JoystickButton(manip, 15);
+    private final JoystickButton elevator_down = new JoystickButton(manip, 16);
+
     private final JoystickButton climb_up = new JoystickButton(test, 10);
     private final JoystickButton climb_down = new JoystickButton(test, 9);
 
@@ -73,11 +78,17 @@ public class RobotContainer {
     private final JoystickButton algaeScore = new JoystickButton(test, 4);
     private final JoystickButton algaeDeploy = new JoystickButton(test, 2);
 
+
+    private final JoystickButton posFour= new JoystickButton(test, 5);
+    private final JoystickButton posThree = new JoystickButton(test, 6);
+    private final JoystickButton posTwo = new JoystickButton(test, 7);
+
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
     private final CoralSpinner s_CoralSpinner;
     private final AlgaePivot s_AlgaePivot;
     private final AlgaeSpinner s_AlgaeSpinner;
+    private final Elevator s_Elevator;
     
     private final Climber s_Climber;
 
@@ -88,6 +99,7 @@ public class RobotContainer {
         s_CoralSpinner = new CoralSpinner();
         s_AlgaePivot = new AlgaePivot();
         s_AlgaeSpinner = new AlgaeSpinner();
+        s_Elevator = new Elevator();
 
         s_Climber = new Climber();
 
@@ -166,10 +178,27 @@ public class RobotContainer {
         level2.onTrue(s_CoralPivot.level2());
         stow.onTrue(s_CoralPivot.stowPivot());
 
+        // ELEVATOR
+        elevator_up.onTrue(s_Elevator.elevatorUp());
+        elevator_down.onTrue(s_Elevator.elevatorDown());
+
+        // ELEVATOR COMMANDS
+        posFour.onTrue(s_Elevator.posFour());
+        posThree.onTrue(s_Elevator.posThree());
+        posTwo.onTrue(s_Elevator.posTwo());
+
         // ALGAE
         algaeStow.onTrue(s_AlgaePivot.stowPivot());
         algaeDeploy.onTrue(s_AlgaePivot.deploy());
         algaeScore.onTrue(s_AlgaePivot.score());
+
+
+        //AUTONOMOUS NAMED COMMANDS
+        NamedCommands.registerCommand("coralOut", s_CoralSpinner.level1());
+
+        NamedCommands.registerCommand("pivtoHPS", s_CoralSpinner.level1());
+        NamedCommands.registerCommand("coralIn", s_CoralSpinner.level1());
+        NamedCommands.registerCommand("LevelOne", s_CoralSpinner.level1());
     }
 
     public void zeroComponents() {

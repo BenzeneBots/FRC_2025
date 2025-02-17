@@ -7,31 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "simplePath"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "startPivot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "simplePath"
+            "name": "LevelOne"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Init Auto",
   "choreoAuto": false
 }

@@ -37,10 +37,10 @@ public class AlgaePivot extends SubsystemBase {
         // motionMagicConfigs.MotionMagicJerk = 1600;
 
         // ALVIN PLEASE SET THE SOFT LIMITS
-        // config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        // config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        // config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 50.0;
-        // config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+         config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 50.0;
+         config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
 
         pivotMotor.getConfigurator().apply(config);
     }

@@ -30,6 +30,12 @@ public class RobotConstants {
     public static class AlgaeSpinnerConstants {
         public static final double speed = 0.5;
     }
+    public static class ElevatorConstants{
+        public static final double speed = 0.1;
+        public static final double posFour = 0;
+        public static final double posThree = 0;
+        public static final double posTwo = 0;
+    }
 
     public static class DriveConstants {
         public static final double translationDeadband = 0.15;
