@@ -179,8 +179,8 @@ public class RobotContainer {
         stow.onTrue(s_CoralPivot.stowPivot());
 
         // ELEVATOR
-        elevator_up.onTrue(s_Elevator.elevatorUp());
-        elevator_down.onTrue(s_Elevator.elevatorDown());
+        elevator_up.whileTrue(s_Elevator.elevatorUp());
+        elevator_down.whileTrue(s_Elevator.elevatorDown());
 
         // ELEVATOR COMMANDS
         posFour.onTrue(s_Elevator.posFour());
@@ -194,11 +194,11 @@ public class RobotContainer {
 
 
         //AUTONOMOUS NAMED COMMANDS
-        NamedCommands.registerCommand("coralOut", s_CoralSpinner.level1());
+        NamedCommands.registerCommand("coralOut", s_CoralSpinner.intake());
 
-        NamedCommands.registerCommand("pivtoHPS", s_CoralSpinner.level1());
-        NamedCommands.registerCommand("coralIn", s_CoralSpinner.level1());
-        NamedCommands.registerCommand("LevelOne", s_CoralSpinner.level1());
+        NamedCommands.registerCommand("pivtoHPS", s_CoralPivot.humanPlayerStation());
+        NamedCommands.registerCommand("coralIn", s_CoralSpinner.outtake());
+        NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2());
     }
 
     public void zeroComponents() {

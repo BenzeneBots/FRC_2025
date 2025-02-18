@@ -138,7 +138,7 @@ public class CoralPivot extends SubsystemBase {
 
             @Override
             public void execute() {
-                pivotMotor.setControl(controller.withVelocity(0.5).withPosition(position));
+                pivotMotor.setControl(controller.withVelocity(0.2).withPosition(position));
             }
 
             @Override
