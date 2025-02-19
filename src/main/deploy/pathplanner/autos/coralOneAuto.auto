@@ -17,6 +17,24 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "LevelTwo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "coralOneHPS"
@@ -29,9 +47,51 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "pivotHPS"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralIn"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "coralOneTR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LevelTwo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralOut"
           }
         }
       ]

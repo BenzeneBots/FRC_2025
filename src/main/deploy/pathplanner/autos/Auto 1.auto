@@ -19,13 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LevelTwo"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralOut"
+            "name": "pivotHPS"
           }
         }
       ]

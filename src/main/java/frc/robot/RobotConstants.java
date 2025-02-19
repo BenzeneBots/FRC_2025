@@ -4,9 +4,9 @@ public class RobotConstants {
     public static class IntakePivotConstants {
         // ALVIN ACTUALLY FIND THESE VALUES
         public static final double stowPos = 0;
-        public static final double humanPlayer = 32;
+        public static final double humanPlayer = 30;
         public static final double level1 = 47;
-        public static final double level2 = 43;
+        public static final double level2 = 41;
 
         public static final double speed = 0.3;
         public static final double slowSpeed = 0.1;

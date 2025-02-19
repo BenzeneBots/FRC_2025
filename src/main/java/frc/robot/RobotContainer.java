@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.stream.IntStream;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -14,9 +16,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -91,32 +95,44 @@ public class RobotContainer {
     private final Elevator s_Elevator;
     
     private final Climber s_Climber;
-
-    private SendableChooser<Command> autoChooser;
-
-    public RobotContainer() {
-        s_CoralPivot = new CoralPivot();
-        s_CoralSpinner = new CoralSpinner();
-        s_AlgaePivot = new AlgaePivot();
-        s_AlgaeSpinner = new AlgaeSpinner();
-        s_Elevator = new Elevator();
-
-        s_Climber = new Climber();
-
-        drivetrain = TunerConstants.createDrivetrain();
-
-        try {
-            autoChooser = AutoBuilder.buildAutoChooser();
-            SmartDashboard.putData("Auto Chooser", autoChooser);
+    private Timer timer;
+    
+        private SendableChooser<Command> autoChooser;
+    
+        public RobotContainer() {
+            s_CoralPivot = new CoralPivot();
+            s_CoralSpinner = new CoralSpinner();
+            s_AlgaePivot = new AlgaePivot();
+            s_AlgaeSpinner = new AlgaeSpinner();
+            s_Elevator = new Elevator();
+    
+            s_Climber = new Climber();
+            regitsterNamedCommands();
+            drivetrain = TunerConstants.createDrivetrain();
+    
+            try {
+                autoChooser = AutoBuilder.buildAutoChooser();
+                SmartDashboard.putData("Auto Chooser", autoChooser);
+            }
+            catch (Exception ex) {
+                DriverStation.reportError("AutoBuilder not made", ex.getStackTrace());
+                autoChooser = null;
+            }
+    
+            configureBindings();
         }
-        catch (Exception ex) {
-            DriverStation.reportError("AutoBuilder not made", ex.getStackTrace());
-            autoChooser = null;
+        private void regitsterNamedCommands(){
+             //AUTONOMOUS NAMED COMMANDS
+            NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
+    
+            NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
+            NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
+            NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
+            NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
         }
-
-        configureBindings();
+        private Command Instant(Command command){
+            return command.withTimeout(1);
     }
-
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -193,14 +209,7 @@ public class RobotContainer {
         algaeScore.onTrue(s_AlgaePivot.score());
 
 
-        //AUTONOMOUS NAMED COMMANDS
-        NamedCommands.registerCommand("coralOut", s_CoralSpinner.intake());
-
-        NamedCommands.registerCommand("pivtoHPS", s_CoralPivot.humanPlayerStation());
-        NamedCommands.registerCommand("coralIn", s_CoralSpinner.outtake());
-        NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2());
-    }
-
+    } 
     public void zeroComponents() {
         s_CoralPivot.zeroMotor();
     }
