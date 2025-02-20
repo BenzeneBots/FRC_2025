@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LevelTwo"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "coralTwoStart"
@@ -19,7 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "LevelOne"
+            "name": "coralOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow"
           }
         },
         {
@@ -37,13 +49,37 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeHumanPlayerStation"
+            "name": "pivotHPS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralIn"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "coralTwoToReef"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LevelTwo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralOut"
           }
         }
       ]

@@ -33,6 +33,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.CoralSpinner;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Vision.limeLight;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -86,6 +87,8 @@ public class RobotContainer {
     private final JoystickButton posFour= new JoystickButton(test, 5);
     private final JoystickButton posThree = new JoystickButton(test, 6);
     private final JoystickButton posTwo = new JoystickButton(test, 7);
+    private final JoystickButton path = new JoystickButton(test, 8);
+    private final JoystickButton target = new JoystickButton(test, 9);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
@@ -93,8 +96,8 @@ public class RobotContainer {
     private final AlgaePivot s_AlgaePivot;
     private final AlgaeSpinner s_AlgaeSpinner;
     private final Elevator s_Elevator;
-    
     private final Climber s_Climber;
+    private final limeLight v_limeLight;
     private Timer timer;
     
         private SendableChooser<Command> autoChooser;
@@ -105,8 +108,9 @@ public class RobotContainer {
             s_AlgaePivot = new AlgaePivot();
             s_AlgaeSpinner = new AlgaeSpinner();
             s_Elevator = new Elevator();
-    
             s_Climber = new Climber();
+            v_limeLight = new limeLight();
+
             regitsterNamedCommands();
             drivetrain = TunerConstants.createDrivetrain();
     
@@ -124,11 +128,11 @@ public class RobotContainer {
         private void regitsterNamedCommands(){
              //AUTONOMOUS NAMED COMMANDS
             NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
-    
-            NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
             NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
+            NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
             NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
             NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
+            NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
         }
         private Command Instant(Command command){
             return command.withTimeout(1);
@@ -208,6 +212,8 @@ public class RobotContainer {
         algaeDeploy.onTrue(s_AlgaePivot.deploy());
         algaeScore.onTrue(s_AlgaePivot.score());
 
+        path.onTrue(v_limeLight.moveCoralRight());
+        target.onTrue(v_limeLight.targetCommand());
 
     } 
     public void zeroComponents() {
