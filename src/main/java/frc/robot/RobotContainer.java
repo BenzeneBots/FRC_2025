@@ -52,22 +52,21 @@ public class RobotContainer {
     private final Joystick manip = new Joystick(1);
     private final Joystick test = new Joystick(2);
 
-    // ALVIN YOU DON'T NEED THESE BUTTONS ANYMORE SINCE YOU HAVE THE PositionDutyCycle Controller
-    private final JoystickButton coral_up = new JoystickButton(manip, 8);
-    private final JoystickButton coral_down = new JoystickButton(manip, 7);
-    private final JoystickButton coral_slow_up = new JoystickButton(manip, 10);
-    private final JoystickButton coral_slow_down = new JoystickButton(manip, 9);
+    private final JoystickButton coral_HPS = new JoystickButton(manip, 8);
+    private final JoystickButton coral_Stow = new JoystickButton(manip, 7);
+    private final JoystickButton coral_levelOne = new JoystickButton(manip, 10);
+    private final JoystickButton coral_levelTwo = new JoystickButton(manip, 9);
     private final JoystickButton coral_in = new JoystickButton(manip, 1);
     private final JoystickButton coral_out = new JoystickButton(manip, 4);
-    private final JoystickButton level_1 = new JoystickButton(manip, 14);
+    private final JoystickButton coral_spinnerSlow = new JoystickButton(manip, 14);
 
     private final JoystickButton algae_up = new JoystickButton(manip, 6);
     private final JoystickButton algae_down = new JoystickButton(manip, 5);
     private final JoystickButton algae_in = new JoystickButton(manip, 2);
     private final JoystickButton algae_out = new JoystickButton(manip, 3);
 
-    private final JoystickButton elevator_up = new JoystickButton(manip, 15);
-    private final JoystickButton elevator_down = new JoystickButton(manip, 16);
+    //private final JoystickButton elevator_up = new JoystickButton(manip, 15);
+    //private final JoystickButton elevator_down = new JoystickButton(manip, 16);
 
     private final JoystickButton climb_up = new JoystickButton(test, 10);
     private final JoystickButton climb_down = new JoystickButton(test, 9);
@@ -166,46 +165,38 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // Coral Pivot
-        // YOU DON'T NEED ANY OF THESE
-        coral_up.whileTrue(s_CoralPivot.up());
-        coral_down.whileTrue(s_CoralPivot.down());
-        coral_slow_up.whileTrue(s_CoralPivot.slowUp());
-        coral_slow_down.whileTrue(s_CoralPivot.slowDown());
-
         // Algae Pivot
-        // YOU DON'T NEED ANY OF THESE
         algae_up.whileTrue(s_AlgaePivot.up());
         algae_down.whileTrue(s_AlgaePivot.down());
 
         // Coral Spinner
         coral_in.whileTrue(s_CoralSpinner.intake());
         coral_out.whileTrue(s_CoralSpinner.outtake());
-        level_1.whileTrue(s_CoralSpinner.level1()); 
-
+        coral_spinnerSlow.whileTrue(s_CoralSpinner.level1()); 
 
         // Algae Spinner
         algae_in.whileTrue(s_AlgaeSpinner.intake());
         algae_out.whileTrue(s_AlgaeSpinner.outtake());
 
-        climb_up.whileTrue(s_Climber.up());
-        climb_down.whileTrue(s_Climber.down());
-
-        // THIS IS THE GOOD STUFF
         // CORAL
-        humanPlayer.onTrue(s_CoralPivot.humanPlayerStation());
-        level1.onTrue(s_CoralPivot.level1());
-        level2.onTrue(s_CoralPivot.level2());
-        stow.onTrue(s_CoralPivot.stowPivot());
-
+        coral_HPS.onTrue(s_CoralPivot.humanPlayerStation());
+        coral_levelOne.onTrue(s_CoralPivot.level1());
+        coral_levelTwo.onTrue(s_CoralPivot.level2());
+        coral_Stow.onTrue(s_CoralPivot.stowPivot());
+        //Test Buttons
         // ELEVATOR
-        elevator_up.whileTrue(s_Elevator.elevatorUp());
-        elevator_down.whileTrue(s_Elevator.elevatorDown());
+        //elevator_up.whileTrue(s_Elevator.elevatorUp());
+        //elevator_down.whileTrue(s_Elevator.elevatorDown());
 
         // ELEVATOR COMMANDS
         posFour.onTrue(s_Elevator.posFour());
         posThree.onTrue(s_Elevator.posThree());
         posTwo.onTrue(s_Elevator.posTwo());
+
+        //Climb
+        climb_up.whileTrue(s_Climber.up());
+        climb_down.whileTrue(s_Climber.down());
+
 
         // ALGAE
         algaeStow.onTrue(s_AlgaePivot.stowPivot());
