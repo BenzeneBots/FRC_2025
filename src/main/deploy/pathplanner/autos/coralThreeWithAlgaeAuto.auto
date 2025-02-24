@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LevelOne"
+            "name": "coralOut"
           }
         },
         {
@@ -37,7 +37,19 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeHumanPlayerStation"
+            "name": "pivotHPS"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralIn"
           }
         },
         {

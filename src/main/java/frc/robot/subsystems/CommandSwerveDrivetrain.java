@@ -15,6 +15,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
+// import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+// import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -51,6 +53,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
+    // private final double fieldLength = 20.00;
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -252,7 +256,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
-
     @Override
     public void periodic() {
         /*

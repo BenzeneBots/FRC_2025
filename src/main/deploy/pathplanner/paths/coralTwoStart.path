@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.010192307692307,
-        "y": 3.880512820512821
+        "x": 6.8357383024143665,
+        "y": 3.8801210163955404
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.2051923076923075,
-        "y": 3.890833333333333
+        "x": 5.711930894300534,
+        "y": 4.183279631112418
       },
       "prevControl": {
-        "x": 6.607692307692307,
-        "y": 3.890833333333333
+        "x": 5.921468446386566,
+        "y": 3.880668392763754
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "coralTwo",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.87669728592468
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

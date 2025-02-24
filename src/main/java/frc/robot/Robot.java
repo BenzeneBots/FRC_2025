@@ -18,12 +18,19 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void robotInit() {
+    m_robotContainer.zeroComponents();
+  }
+  
+  @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.stowSubsystems();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -48,7 +55,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.zeroComponents();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
