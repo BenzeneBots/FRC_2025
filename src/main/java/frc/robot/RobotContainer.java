@@ -6,8 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.stream.IntStream;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -16,11 +14,9 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -72,10 +68,10 @@ public class RobotContainer {
     private final JoystickButton climb_down = new JoystickButton(test, 9);
 
     // ALVIN CHANGE THESE BUTTONS TO MANIP CONTROLLER, NOT TEST
-    private final JoystickButton humanPlayer = new JoystickButton(test, 1);
-    private final JoystickButton level1 = new JoystickButton(test, 3);
-    private final JoystickButton level2 = new JoystickButton(test, 4);
-    private final JoystickButton stow = new JoystickButton(test, 2);
+    // private final JoystickButton humanPlayer = new JoystickButton(test, 1);
+    // private final JoystickButton level1 = new JoystickButton(test, 3);
+    // private final JoystickButton level2 = new JoystickButton(test, 4);
+    // private final JoystickButton stow = new JoystickButton(test, 2);
 
     // ALVIN ACTUALLY FIND BUTTON NUMBERS FOR THESE, I JUST COPIED THESE FROM THE ALGAE STUFF
     private final JoystickButton algaeStow = new JoystickButton(test, 3);
@@ -97,45 +93,46 @@ public class RobotContainer {
     private final Elevator s_Elevator;
     private final Climber s_Climber;
     private final limeLight v_limeLight;
-    private Timer timer;
     
-        private SendableChooser<Command> autoChooser;
-    
-        public RobotContainer() {
-            s_CoralPivot = new CoralPivot();
-            s_CoralSpinner = new CoralSpinner();
-            s_AlgaePivot = new AlgaePivot();
-            s_AlgaeSpinner = new AlgaeSpinner();
-            s_Elevator = new Elevator();
-            s_Climber = new Climber();
-            v_limeLight = new limeLight();
+    private SendableChooser<Command> autoChooser;
 
-            regitsterNamedCommands();
-            drivetrain = TunerConstants.createDrivetrain();
-    
-            try {
-                autoChooser = AutoBuilder.buildAutoChooser();
-                SmartDashboard.putData("Auto Chooser", autoChooser);
-            }
-            catch (Exception ex) {
-                DriverStation.reportError("AutoBuilder not made", ex.getStackTrace());
-                autoChooser = null;
-            }
-    
-            configureBindings();
+    public RobotContainer() {
+        s_CoralPivot = new CoralPivot();
+        s_CoralSpinner = new CoralSpinner();
+        s_AlgaePivot = new AlgaePivot();
+        s_AlgaeSpinner = new AlgaeSpinner();
+        s_Elevator = new Elevator();
+        s_Climber = new Climber();
+        v_limeLight = new limeLight();
+
+        regitsterNamedCommands();
+        drivetrain = TunerConstants.createDrivetrain();
+
+        try {
+            autoChooser = AutoBuilder.buildAutoChooser();
+            SmartDashboard.putData("Auto Chooser", autoChooser);
         }
-        private void regitsterNamedCommands(){
-             //AUTONOMOUS NAMED COMMANDS
-            NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
-            NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
-            NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
-            NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
-            NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
-            NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
+        catch (Exception ex) {
+            DriverStation.reportError("AutoBuilder not made", ex.getStackTrace());
+            autoChooser = null;
         }
-        private Command Instant(Command command){
-            return command.withTimeout(1);
+
+        configureBindings();
     }
+    private void regitsterNamedCommands(){
+            //AUTONOMOUS NAMED COMMANDS
+        NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
+        NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
+        NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
+        NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
+        NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
+        NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
+    }
+
+    private Command Instant(Command command){
+        return command.withTimeout(1);
+    }
+
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -204,11 +201,18 @@ public class RobotContainer {
         algaeScore.onTrue(s_AlgaePivot.score());
 
         path.onTrue(v_limeLight.moveCoralRight());
-        target.onTrue(v_limeLight.targetCommand());
+        target.onTrue(v_limeLight.tar());
 
     } 
+
+    public void stowSubsystems() {
+        s_CoralPivot.stowPivot().execute();
+        s_AlgaePivot.stowPivot().execute();
+    }
+
     public void zeroComponents() {
         s_CoralPivot.zeroMotor();
+        s_AlgaePivot.setZero();
     }
 
     public Command getAutonomousCommand() {

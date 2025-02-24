@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
@@ -14,13 +14,12 @@ import frc.robot.RobotConstants.IntakePivotConstants;
 
 public class CoralPivot extends SubsystemBase {
     private final TalonFX pivotMotor;
-    private final PositionDutyCycle controller;
+    private final MotionMagicVoltage controller;
 
     public CoralPivot() {
         pivotMotor = new TalonFX(60, "BB_CANIVORE");
         configMotor();
-        // controller = new MotionMagicVoltage(0);
-        controller = new PositionDutyCycle(0);
+        controller = new MotionMagicVoltage(0);
     }
 
     public void zeroMotor() {
@@ -37,15 +36,15 @@ public class CoralPivot extends SubsystemBase {
         config.Slot0.kI = 0.5;
         config.Slot0.kG = 0.5;
 
-        // var motionMagicConfigs = config.MotionMagic;
-        // motionMagicConfigs.MotionMagicCruiseVelocity = 80;
-        // motionMagicConfigs.MotionMagicAcceleration = 160;
-        // motionMagicConfigs.MotionMagicJerk = 1600;
+         var motionMagicConfigs = config.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 80;
+        motionMagicConfigs.MotionMagicAcceleration = 160;
+        motionMagicConfigs.MotionMagicJerk = 1600;
 
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 50.0;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -51;
 
         pivotMotor.getConfigurator().apply(config);
     }
@@ -138,7 +137,7 @@ public class CoralPivot extends SubsystemBase {
 
             @Override
             public void execute() {
-                pivotMotor.setControl(controller.withVelocity(0.2).withPosition(position));
+                pivotMotor.setControl(controller.withSlot(0).withPosition(position));
             }
 
             @Override

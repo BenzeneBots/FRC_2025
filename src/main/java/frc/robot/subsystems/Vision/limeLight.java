@@ -1,10 +1,7 @@
 package frc.robot.subsystems.Vision;
 
-import org.ejml.equation.IntegerSequence.For;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathfindThenFollowPath;
-import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,17 +10,17 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.CoralSpinner;   
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj.Timer;
-public class limeLight extends SubsystemBase {
 
+public class limeLight extends SubsystemBase {
+    private final CoralSpinner s_CoralSpinner;
     NetworkTable limeLightTable;
     public limeLight() {
         limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+        s_CoralSpinner = new CoralSpinner();
     }
         public double[] getBotPose() {
         return limeLightTable.getEntry("botpose").getDoubleArray(new double[6]);
@@ -102,6 +99,17 @@ public class limeLight extends SubsystemBase {
         });
     
     }
+    public Command limeExists(){
+             return new Command() {
+            @Override
+            public void execute() {
+                if(targetExistance()){
+                    s_CoralSpinner.level1();
+                }
+            }
+        };
+    }
+
     public Pose2d target(){
         double[] targetPose = getTargetPose();
         double targetX = targetPose[0];
@@ -117,22 +125,58 @@ public class limeLight extends SubsystemBase {
                 System.out.println("No AprilTag");
                 return;
             }
- 
+
+            double[] target = getTargetPose();
+            double targetX = target[0];
+            double targetY = target[1];
+            double targetRotation = target[5];
+
+            Pose2d tp = new Pose2d(targetX - 0.3, targetY, Rotation2d.fromDegrees(targetRotation));
+
+
             PathConstraints constraints = new PathConstraints(
             3.0, 4.0,
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
             Command pathfindingCommand = AutoBuilder.pathfindToPose(
-            target(),
+            tp,
             constraints, 
             0.0);           
             pathfindingCommand.schedule();             
         });
     }
+    public Command tar() {
+        return new Command() {
+            public void execute() {
+           double[] target = getTargetPose();
+            double targetX = target[0];
+            double targetY = target[1];
+            double targetRotation = target[5];
+
+            Pose2d tp = new Pose2d(targetX - 0.3, targetY, Rotation2d.fromDegrees(targetRotation));
+
+
+            PathConstraints constraints = new PathConstraints(
+            3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+            Command pathCommand = AutoBuilder.pathfindToPose(
+            tp,
+            constraints, 
+            0.0);                        
+        
+            pathCommand.schedule();             
+            }
+        };
+    }
+
+
     @Override
     public void periodic(){
         updateDashboard();
         botPosition();
+        SmartDashboard.putBoolean("limelightExists?", targetExistance());
+        SmartDashboard.putNumberArray("targetPose", getTargetPose());
     }
 
 

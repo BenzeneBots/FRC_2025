@@ -10,7 +10,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants;
-import frc.robot.RobotConstants.IntakeSpinnerConstants;
+// import frc.robot.RobotConstants.IntakeSpinnerConstants;
 
 public class Elevator extends SubsystemBase {
     private TalonFX elevatorMotor;
