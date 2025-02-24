@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,28 +44,22 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final Joystick manip = new Joystick(1);
-    private final Joystick test = new Joystick(2);
+    // private final Joystick test = new Joystick(2);
 
-    private final JoystickButton coral_in = new JoystickButton(manip, 1);
-    private final JoystickButton coral_out = new JoystickButton(manip, 4);
-    private final JoystickButton level_1 = new JoystickButton(manip, 14);
+    private final JoystickButton coral_in = new JoystickButton(manip, 11);
+    private final JoystickButton coral_out = new JoystickButton(manip, 12);
 
-    private final JoystickButton algae_in = new JoystickButton(manip, 2);
-    private final JoystickButton algae_out = new JoystickButton(manip, 3);
+    private final JoystickButton algae_in = new JoystickButton(manip, 9);
+    private final JoystickButton algae_out = new JoystickButton(manip, 10);
 
-    private final JoystickButton climb_up = new JoystickButton(test, 10);
-    private final JoystickButton climb_down = new JoystickButton(test, 9);
+    private final JoystickButton stow = new JoystickButton(manip, 5);
+    private final JoystickButton humanPlayer = new JoystickButton(manip, 6);
+    private final JoystickButton level2 = new JoystickButton(manip, 7);
+    private final JoystickButton level1 = new JoystickButton(manip, 8);
 
-    // ALVIN CHANGE THESE BUTTONS TO MANIP CONTROLLER, NOT TEST
-    private final JoystickButton humanPlayer = new JoystickButton(test, 1);
-    private final JoystickButton level1 = new JoystickButton(test, 3);
-    private final JoystickButton level2 = new JoystickButton(test, 4);
-    private final JoystickButton stow = new JoystickButton(test, 2);
-
-    // ALVIN ACTUALLY FIND BUTTON NUMBERS FOR THESE, I JUST COPIED THESE FROM THE ALGAE STUFF
-    private final JoystickButton algaeStow = new JoystickButton(test, 3);
-    private final JoystickButton algaeScore = new JoystickButton(test, 4);
-    private final JoystickButton algaeDeploy = new JoystickButton(test, 2);
+    private final JoystickButton algaeStow = new JoystickButton(manip, 4);
+    private final JoystickButton algaeScore = new JoystickButton(manip, 2);
+    private final JoystickButton algaeDeploy = new JoystickButton(manip, 1);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
@@ -84,6 +79,7 @@ public class RobotContainer {
 
         s_Climber = new Climber();
 
+        regitsterNamedCommands();
         drivetrain = TunerConstants.createDrivetrain();
 
         try {
@@ -98,6 +94,21 @@ public class RobotContainer {
         configureBindings();
     }
 
+    private void regitsterNamedCommands(){
+            //AUTONOMOUS NAMED COMMANDS
+        NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
+                NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
+                NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
+                NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
+                NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
+                NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
+            }
+        
+        private Command Instant(Command outtake) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'Instant'");
+        }
+        
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -130,14 +141,14 @@ public class RobotContainer {
         // Coral Spinner
         coral_in.whileTrue(s_CoralSpinner.intake());
         coral_out.whileTrue(s_CoralSpinner.outtake());
-        level_1.whileTrue(s_CoralSpinner.level1()); 
 
         // Algae Spinner
         algae_in.whileTrue(s_AlgaeSpinner.intake());
         algae_out.whileTrue(s_AlgaeSpinner.outtake());
 
-        climb_up.whileTrue(s_Climber.up());
-        climb_down.whileTrue(s_Climber.down());
+        // Adjust these buttons later
+        joystick.button(1).whileTrue(s_Climber.up());
+        joystick.button(2).whileTrue(s_Climber.down());
 
         // CORAL
         humanPlayer.onTrue(s_CoralPivot.humanPlayerStation());
