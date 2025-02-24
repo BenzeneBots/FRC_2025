@@ -48,14 +48,14 @@ public class RobotContainer {
     // ALVIN YOU DON'T NEED THESE BUTTONS ANYMORE SINCE YOU HAVE THE PositionDutyCycle Controller
     private final JoystickButton coral_up = new JoystickButton(manip, 8);
     private final JoystickButton coral_down = new JoystickButton(manip, 7);
-    private final JoystickButton coral_slow_up = new JoystickButton(manip, 10);
-    private final JoystickButton coral_slow_down = new JoystickButton(manip, 9);
+    // private final JoystickButton coral_slow_up = new JoystickButton(manip, 10);
+    // private final JoystickButton coral_slow_down = new JoystickButton(manip, 9);
     private final JoystickButton coral_in = new JoystickButton(manip, 1);
     private final JoystickButton coral_out = new JoystickButton(manip, 4);
     private final JoystickButton level_1 = new JoystickButton(manip, 14);
 
-    private final JoystickButton algae_up = new JoystickButton(manip, 6);
-    private final JoystickButton algae_down = new JoystickButton(manip, 5);
+    private final JoystickButton algae_up = new JoystickButton(manip, 9);
+    private final JoystickButton algae_down = new JoystickButton(manip, 10);
     private final JoystickButton algae_in = new JoystickButton(manip, 2);
     private final JoystickButton algae_out = new JoystickButton(manip, 3);
 
@@ -138,8 +138,8 @@ public class RobotContainer {
         // YOU DON'T NEED ANY OF THESE
         coral_up.whileTrue(s_CoralPivot.up());
         coral_down.whileTrue(s_CoralPivot.down());
-        coral_slow_up.whileTrue(s_CoralPivot.slowUp());
-        coral_slow_down.whileTrue(s_CoralPivot.slowDown());
+        // coral_slow_up.whileTrue(s_CoralPivot.slowUp());
+        // coral_slow_down.whileTrue(s_CoralPivot.slowDown());
 
         // Algae Pivot
         // YOU DON'T NEED ANY OF THESE
@@ -173,7 +173,7 @@ public class RobotContainer {
     }
 
     public void zeroComponents() {
-        s_CoralPivot.zeroMotor();
+        // s_CoralPivot.zeroMotor();
     }
 
     public Command getAutonomousCommand() {
