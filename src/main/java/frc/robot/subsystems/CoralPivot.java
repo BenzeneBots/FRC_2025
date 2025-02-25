@@ -31,10 +31,10 @@ public class CoralPivot extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.Slot0.kP = 0.5;
+        config.Slot0.kP = 2.15;
         config.Slot0.kD = 0.0;
-        config.Slot0.kI = 0.5;
-        config.Slot0.kG = 0.5;
+        config.Slot0.kI = 2.5;
+        config.Slot0.kG = 0.25;
 
          var motionMagicConfigs = config.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = 80;

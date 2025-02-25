@@ -23,8 +23,8 @@ public class RobotConstants {
 
         // ALVIN ACTUALLY FIND THESE VALUES
         public static final double stowPos = 0;
-        public static final double deployed = 0;
-        public static final double score = 0;
+        public static final double deployed = -12.7;
+        public static final double score = -7.7;
     }
 
     public static class AlgaeSpinnerConstants {

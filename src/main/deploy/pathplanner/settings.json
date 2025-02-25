@@ -3,9 +3,10 @@
   "robotLength": 0.737,
   "holonomicMode": true,
   "pathFolders": [
-    "coralThreeWithAlgae",
+    "New Folder",
     "coralOne",
     "coralThree",
+    "coralThreeWithAlgae",
     "coralTwo"
   ],
   "autoFolders": [

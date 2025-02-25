@@ -61,6 +61,8 @@ public class RobotContainer {
     private final JoystickButton algaeScore = new JoystickButton(manip, 2);
     private final JoystickButton algaeDeploy = new JoystickButton(manip, 1);
 
+    private final JoystickButton algaedown = new JoystickButton(manip, 14);
+    private final JoystickButton algaeup= new JoystickButton(manip, 13);
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralPivot s_CoralPivot;
     private final CoralSpinner s_CoralSpinner;
@@ -104,9 +106,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
             }
         
-        private Command Instant(Command outtake) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'Instant'");
+        private Command Instant(Command command) {
+            return command.withTimeout(1);
         }
         
     private void configureBindings() {
@@ -160,6 +161,8 @@ public class RobotContainer {
         algaeStow.onTrue(s_AlgaePivot.stowPivot());
         algaeDeploy.onTrue(s_AlgaePivot.deploy());
         algaeScore.onTrue(s_AlgaePivot.score());
+        algaedown.whileTrue(s_AlgaePivot.down());
+        algaeup.whileTrue(s_AlgaePivot.up());
     }
 
     public void zeroComponents() {
