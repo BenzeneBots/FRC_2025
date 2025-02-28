@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Square"
+            "pathName": "coralRedStart"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Red Auto",
   "choreoAuto": false
 }
