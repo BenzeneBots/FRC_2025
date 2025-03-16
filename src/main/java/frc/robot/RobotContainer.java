@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -24,10 +25,11 @@ import frc.robot.RobotConstants.DriveConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaePivot;
 import frc.robot.subsystems.AlgaeSpinner;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.CoralSpinner;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.FirstPivot;
+import frc.robot.subsystems.SecondPivot;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -44,40 +46,41 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final Joystick manip = new Joystick(1);
-    // private final Joystick test = new Joystick(2);
 
-    private final JoystickButton coral_in = new JoystickButton(manip, 11);
-    private final JoystickButton coral_out = new JoystickButton(manip, 12);
+    private final JoystickButton coral_in = new JoystickButton(manip, 9);
+    private final JoystickButton coral_out = new JoystickButton(manip, 10);
 
-    private final JoystickButton algae_in = new JoystickButton(manip, 9);
-    private final JoystickButton algae_out = new JoystickButton(manip, 10);
+    private final JoystickButton algae_in = new JoystickButton(manip, 11);
+    private final JoystickButton algae_out = new JoystickButton(manip, 12);
 
-    private final JoystickButton stow = new JoystickButton(manip, 5);
-    private final JoystickButton humanPlayer = new JoystickButton(manip, 6);
-    private final JoystickButton level2 = new JoystickButton(manip, 7);
-    private final JoystickButton level1 = new JoystickButton(manip, 8);
+    private final JoystickButton algae_stow = new JoystickButton(manip, 1);
+    private final JoystickButton algae_deployed = new JoystickButton(manip, 2);
+    private final JoystickButton algae_score = new JoystickButton(manip, 3);
 
-    private final JoystickButton algaeStow = new JoystickButton(manip, 4);
-    private final JoystickButton algaeScore = new JoystickButton(manip, 2);
-    private final JoystickButton algaeDeploy = new JoystickButton(manip, 1);
+    private final JoystickButton playerFeed = new JoystickButton(manip, 14);
+    private final JoystickButton level2Score = new JoystickButton(manip, 5);
+    private final JoystickButton level3Score = new JoystickButton(manip, 6);
+    private final JoystickButton reset = new JoystickButton(manip, 13);
+
+    private final JoystickButton zeroAll = new JoystickButton(manip, 7);
 
     public final CommandSwerveDrivetrain drivetrain;
-    private final CoralPivot s_CoralPivot;
     private final CoralSpinner s_CoralSpinner;
     private final AlgaePivot s_AlgaePivot;
     private final AlgaeSpinner s_AlgaeSpinner;
-    
-    private final Climber s_Climber;
+    private final Elevator s_Elevator;
+    private final FirstPivot s_FirstPivot;
+    private final SecondPivot s_SecondPivot;
 
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        s_CoralPivot = new CoralPivot();
         s_CoralSpinner = new CoralSpinner();
         s_AlgaePivot = new AlgaePivot();
         s_AlgaeSpinner = new AlgaeSpinner();
-
-        s_Climber = new Climber();
+        s_Elevator = new Elevator();
+        s_FirstPivot = new FirstPivot();
+        s_SecondPivot = new SecondPivot();
 
         regitsterNamedCommands();
         drivetrain = TunerConstants.createDrivetrain();
@@ -95,19 +98,7 @@ public class RobotContainer {
     }
 
     private void regitsterNamedCommands(){
-            //AUTONOMOUS NAMED COMMANDS
-        NamedCommands.registerCommand("coralOut", Instant(s_CoralSpinner.outtake())); 
-                NamedCommands.registerCommand("coralIn", Instant(s_CoralSpinner.intake()));
-                NamedCommands.registerCommand("pivotHPS", s_CoralPivot.humanPlayerStation());
-                NamedCommands.registerCommand("LevelTwo", s_CoralPivot.level2()); 
-                NamedCommands.registerCommand("LevelOne", s_CoralPivot.level1()); 
-                NamedCommands.registerCommand("Stow", s_CoralPivot.stowPivot()); 
-            }
-        
-        private Command Instant(Command outtake) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'Instant'");
-        }
+    }
         
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -137,39 +128,36 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
-        // Coral Spinner
-        coral_in.whileTrue(s_CoralSpinner.intake());
-        coral_out.whileTrue(s_CoralSpinner.outtake());
-
-        // Algae Spinner
+        
         algae_in.whileTrue(s_AlgaeSpinner.intake());
         algae_out.whileTrue(s_AlgaeSpinner.outtake());
 
-        // Adjust these buttons later
-        joystick.button(1).whileTrue(s_Climber.up());
-        joystick.button(2).whileTrue(s_Climber.down());
+        algae_stow.onTrue(s_AlgaePivot.stowPivot());
+        algae_deployed.onTrue(s_AlgaePivot.deploy());
+        algae_score.onTrue(s_AlgaePivot.score());
 
-        // CORAL
-        humanPlayer.onTrue(s_CoralPivot.humanPlayerStation());
-        level1.onTrue(s_CoralPivot.level1());
-        level2.onTrue(s_CoralPivot.level2());
-        stow.onTrue(s_CoralPivot.stowPivot());
+        playerFeed.onTrue(s_Elevator.feedPos().andThen(s_SecondPivot.feedPos().andThen(s_FirstPivot.feedPos())));
+        level2Score.onTrue(s_Elevator.level2Pos().andThen(s_SecondPivot.level2Pos()).andThen(s_FirstPivot.level2Pos()));
+        level3Score.onTrue(s_Elevator.level3Pos().andThen(s_SecondPivot.level2Pos()).andThen(s_FirstPivot.level2Pos()));
 
-        // ALGAE
-        algaeStow.onTrue(s_AlgaePivot.stowPivot());
-        algaeDeploy.onTrue(s_AlgaePivot.deploy());
-        algaeScore.onTrue(s_AlgaePivot.score());
+        zeroAll.onTrue(s_SecondPivot.resetPose().andThen(s_FirstPivot.resetPose()).andThen(s_Elevator.resetPos()));
+
+        coral_in.whileTrue(s_CoralSpinner.intake());
+        coral_out.whileTrue(s_CoralSpinner.outtake());
+
+        reset.onTrue(new InstantCommand() {
+            @Override
+            public void execute() {
+                reset();
+            }
+        });
     }
 
-    public void zeroComponents() {
-        s_CoralPivot.zeroMotor();
-        s_AlgaePivot.setZero();
-    }
-
-    public void stowSubsystems() {
-        s_CoralPivot.stowPivot().schedule();
-        s_AlgaePivot.stowPivot().schedule();
+    public void reset() {
+        s_AlgaePivot.reset();
+        s_Elevator.reset();
+        s_FirstPivot.reset();
+        s_SecondPivot.reset();
     }
 
     public Command getAutonomousCommand() {

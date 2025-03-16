@@ -11,19 +11,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.AlgaePivotConstants;
 
-
 public class AlgaePivot extends SubsystemBase {
     private final TalonFX pivotMotor;
     private final MotionMagicVoltage controller;
+    private double zeroPos = 0.0;
 
     public AlgaePivot() {
-        pivotMotor = new TalonFX(61, "BB_CANIVORE");
+        pivotMotor = new TalonFX(59);
+        reset();
         configMotor();
         controller = new MotionMagicVoltage(0);
     }
 
-    public void setZero() {
-        pivotMotor.setPosition(0.0);
+    public void reset() {
+        this.zeroPos = pivotMotor.getPosition().getValueAsDouble();
     }
 
     public void configMotor() {
@@ -31,64 +32,34 @@ public class AlgaePivot extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.Slot0.kP = 0.5;
-        config.Slot0.kD = 0;
-        config.Slot0.kI = 0.5;
-        config.Slot0.kG = 0.5;
+        config.Slot0.kP = 3.0;
+        config.Slot0.kD = 0.15;
+        config.Slot0.kI = 15.0;
+        config.Slot0.kG = 0.0;
 
         var motionMagicConfigs = config.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 80;
-        motionMagicConfigs.MotionMagicAcceleration = 160;
-        motionMagicConfigs.MotionMagicJerk = 1600;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 30;
+        motionMagicConfigs.MotionMagicAcceleration = 60;
+        motionMagicConfigs.MotionMagicJerk = 600;
 
-         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-         config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0;
-         config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -27.0;
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = this.zeroPos + 4;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = this.zeroPos;
 
         pivotMotor.getConfigurator().apply(config);
     }
 
-    public Command up() {
-        return new Command() {
-            @Override
-            public void execute() {
-                pivotMotor.set(AlgaePivotConstants.speed);
-            }
-
-            @Override
-            public void end(boolean interrupted) {
-                pivotMotor.stopMotor();
-                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
-            }
-        };
-    }
-
-    public Command down() {
-        return new Command() {
-            @Override
-            public void execute() {
-                pivotMotor.set(-AlgaePivotConstants.speed);
-            }
-
-            @Override
-            public void end(boolean interrupted) {
-                pivotMotor.stopMotor();
-                pivotMotor.setControl(controller.withSlot(0).withPosition(pivotMotor.getPosition().getValueAsDouble()));
-            }
-        };
-    }
-    
     public Command stowPivot() {
-        return setPosition(AlgaePivotConstants.stowPos);
+        return setPosition(AlgaePivotConstants.stowPos + this.zeroPos);
     }
 
     public Command score() {
-        return setPosition(AlgaePivotConstants.score);
+        return setPosition(AlgaePivotConstants.score + this.zeroPos);
     }
 
     public Command deploy() {
-        return setPosition(AlgaePivotConstants.deployed);
+        return setPosition(AlgaePivotConstants.deployed + this.zeroPos);
     }
 
     public Command setPosition(double position) {
@@ -115,6 +86,7 @@ public class AlgaePivot extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Algae Pivot Pos", pivotMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Algae Pivot Pos", pivotMotor.getPosition().getValueAsDouble() - this.zeroPos);
+        SmartDashboard.putNumber("Algae Zero Pos", this.zeroPos);
     }
 }

@@ -8,17 +8,16 @@ import frc.robot.RobotConstants.IntakeSpinnerConstants;
 
 
 public class CoralSpinner extends SubsystemBase {
-    private final TalonFX spinner = new TalonFX(56, "BB_CANIVORE");
+    private final TalonFX spinner = new TalonFX(55, "BB_CANIVORE");
 
     public CoralSpinner() {
-
     }
 
     public Command intake() {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(IntakeSpinnerConstants.intakeSpeed);
+                spinner.setVoltage(4.0);
             }
             
             @Override
@@ -32,23 +31,9 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.set(IntakeSpinnerConstants.outtakeSpeed);
+                spinner.setVoltage(-15.0);
             }
             
-            @Override
-            public void end(boolean interrupted) {
-                spinner.stopMotor();
-            }
-        };
-    }
-
-    public Command level1() {
-        return new Command() {
-            @Override
-            public void execute() {
-                spinner.set(IntakeSpinnerConstants.level1Speed);
-            }
-
             @Override
             public void end(boolean interrupted) {
                 spinner.stopMotor();

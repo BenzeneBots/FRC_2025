@@ -19,7 +19,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    m_robotContainer.zeroComponents();
   }
   
   @Override
@@ -29,7 +28,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    m_robotContainer.stowSubsystems();
   }
 
   @Override
@@ -58,6 +56,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
+    m_robotContainer.reset();
   }
 
   @Override
