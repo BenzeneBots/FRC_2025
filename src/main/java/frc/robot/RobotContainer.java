@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -62,7 +63,8 @@ public class RobotContainer {
     private final JoystickButton level3Score = new JoystickButton(manip, 6);
     private final JoystickButton reset = new JoystickButton(manip, 13);
 
-    private final JoystickButton zeroAll = new JoystickButton(manip, 7);
+    private final JoystickButton override = new JoystickButton(manip, 7);
+    private final JoystickButton intermediate = new JoystickButton(manip, 8);
 
     public final CommandSwerveDrivetrain drivetrain;
     private final CoralSpinner s_CoralSpinner;
@@ -71,6 +73,12 @@ public class RobotContainer {
     private final Elevator s_Elevator;
     private final FirstPivot s_FirstPivot;
     private final SecondPivot s_SecondPivot;
+
+    private final Command humanPlayerCommand; 
+    private final Command intermediateCommand; 
+    private final Command zeroAllCommand; 
+    private final Command level2Command; 
+    private final Command level3Command; 
 
     private SendableChooser<Command> autoChooser;
 
@@ -81,6 +89,28 @@ public class RobotContainer {
         s_Elevator = new Elevator();
         s_FirstPivot = new FirstPivot();
         s_SecondPivot = new SecondPivot();
+
+        // humanPlayerCommand = s_Elevator.feedPos().andThen(s_SecondPivot.feedPos()
+        //     .andThen(s_FirstPivot.feedPos()));
+
+        humanPlayerCommand = s_Elevator.feedPos()
+            .andThen(s_FirstPivot.feedPos())
+            .andThen(s_SecondPivot.feedPos())
+            .andThen(s_CoralSpinner.intake());
+
+        zeroAllCommand = s_SecondPivot.resetPose()
+            .andThen(s_FirstPivot.resetPose())
+            .andThen(s_Elevator.resetPos());
+        
+        level2Command = s_Elevator.level2Pos()
+            .andThen(s_SecondPivot.level2Pos())
+            .andThen(s_FirstPivot.level2Pos());
+
+        level3Command = s_Elevator.level3Pos()
+            .andThen(s_SecondPivot.level3Pos())
+            .andThen(s_FirstPivot.level2Pos());
+
+        intermediateCommand = s_Elevator.intermediatePos();
 
         regitsterNamedCommands();
         drivetrain = TunerConstants.createDrivetrain();
@@ -136,14 +166,16 @@ public class RobotContainer {
         algae_deployed.onTrue(s_AlgaePivot.deploy());
         algae_score.onTrue(s_AlgaePivot.score());
 
-        playerFeed.onTrue(s_Elevator.feedPos().andThen(s_SecondPivot.feedPos().andThen(s_FirstPivot.feedPos())));
-        level2Score.onTrue(s_Elevator.level2Pos().andThen(s_SecondPivot.level2Pos()).andThen(s_FirstPivot.level2Pos()));
-        level3Score.onTrue(s_Elevator.level3Pos().andThen(s_SecondPivot.level2Pos()).andThen(s_FirstPivot.level2Pos()));
+        playerFeed.onTrue(humanPlayerCommand);
+        level2Score.onTrue(level2Command);
+        level3Score.onTrue(level3Command);
 
-        zeroAll.onTrue(s_SecondPivot.resetPose().andThen(s_FirstPivot.resetPose()).andThen(s_Elevator.resetPos()));
+        intermediate.onTrue(intermediateCommand.andThen(new WaitCommand(1.5)).andThen(zeroAllCommand));
 
         coral_in.whileTrue(s_CoralSpinner.intake());
         coral_out.whileTrue(s_CoralSpinner.outtake());
+        
+        override.whileTrue(s_Elevator.overrideCommand(() -> manip.getRawAxis(5)));
 
         reset.onTrue(new InstantCommand() {
             @Override

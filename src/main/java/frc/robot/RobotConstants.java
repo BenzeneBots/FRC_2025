@@ -33,8 +33,9 @@ public class RobotConstants {
     }
 
     public static class SecondPivotConstants {
-        public static final double feedPos = 5.43115234375;
-        public static final double level2Pos = -4.62;
+        public static final double feedPos = 4.5;
+        public static final double level2Pos = -4.58;
+        public static final double level3Pos = -4.75;
     }
 
     public static class FirstPivotConstants {
@@ -43,8 +44,9 @@ public class RobotConstants {
     }
 
     public static class ElevatorConstants {
-        public static final double feedPos = 28.84;
+        public static final double feedPos = 35;
         public static final double level2Pos = 140.7490234375;
         public static final double level3 = 295.22265625;
+        public static final double intermediatePos = 150;
     }
 }

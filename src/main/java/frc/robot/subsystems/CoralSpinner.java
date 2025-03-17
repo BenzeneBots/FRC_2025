@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConstants.IntakeSpinnerConstants;
@@ -19,6 +20,11 @@ public class CoralSpinner extends SubsystemBase {
             public void execute() {
                 spinner.setVoltage(4.0);
             }
+
+            @Override
+            public boolean isFinished() {
+                return (spinner.getMotorOutputStatus().getValue().value == 4);
+            }
             
             @Override
             public void end(boolean interrupted) {
@@ -31,7 +37,7 @@ public class CoralSpinner extends SubsystemBase {
         return new Command() {
             @Override
             public void execute() {
-                spinner.setVoltage(-15.0);
+                spinner.set(IntakeSpinnerConstants.outtakeSpeed);
             }
             
             @Override
@@ -39,5 +45,10 @@ public class CoralSpinner extends SubsystemBase {
                 spinner.stopMotor();
             }
         };
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putString("Spinner Motor Status", spinner.getMotorOutputStatus().getValue().toString());
     }
 }

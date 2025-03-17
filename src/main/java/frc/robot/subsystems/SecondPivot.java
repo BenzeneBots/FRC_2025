@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotConstants.FirstPivotConstants;
 import frc.robot.RobotConstants.SecondPivotConstants;
 
 public class SecondPivot extends SubsystemBase {
@@ -25,18 +24,18 @@ public class SecondPivot extends SubsystemBase {
         controller = new MotionMagicVoltage(0);
     }
 
+
     public void reset() {
         this.zeroPos = pivotMotor.getPosition().getValueAsDouble();
     }
 
     public void configMotor() {
         pivotMotor.clearStickyFaults();
-        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         config.Slot0.kP = 3.5;
-        config.Slot0.kD = 0.05;
+        config.Slot0.kD = 0.0;
         config.Slot0.kI = 15.0;
         config.Slot0.kG = 0.0;
 
@@ -45,12 +44,19 @@ public class SecondPivot extends SubsystemBase {
         motionMagicConfigs.MotionMagicAcceleration = 160;
         motionMagicConfigs.MotionMagicJerk = 1600;
 
+        var motorOutputConfigs = config.MotorOutput;
+        motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = this.zeroPos + 5.5;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = this.zeroPos - 4.9;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = this.zeroPos + 4.8;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = this.zeroPos - 5.2;
 
         pivotMotor.getConfigurator().apply(config);
+    }
+
+    public Command testPos() {
+        return setPosition(5.0);
     }
 
     public Command feedPos() {
@@ -59,6 +65,10 @@ public class SecondPivot extends SubsystemBase {
 
     public Command level2Pos() {
         return setPosition(SecondPivotConstants.level2Pos + this.zeroPos);
+    }
+
+    public Command level3Pos() {
+        return setPosition(SecondPivotConstants.level3Pos + this.zeroPos);
     }
 
     public Command resetPose() {

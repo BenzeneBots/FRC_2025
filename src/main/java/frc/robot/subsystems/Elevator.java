@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -21,6 +24,21 @@ public class Elevator extends SubsystemBase {
         reset();
         configMotor();
         controller = new MotionMagicVoltage(0);
+    }
+
+    public Command overrideCommand(DoubleSupplier joystick) {
+        return new Command() {
+            @Override
+            public void execute() {
+                if(joystick.getAsDouble() > 0.05) {
+                    pivotMotor.set(0.1);
+                } else if(joystick.getAsDouble() < -0.05) {
+                    pivotMotor.set(-0.1);
+                } else {
+                    pivotMotor.stopMotor();
+                }
+            }
+        };
     }
 
     public void reset() {
@@ -66,6 +84,10 @@ public class Elevator extends SubsystemBase {
         return setPosition(this.zeroPos);
     }
 
+    public Command intermediatePos() {
+        return setPosition(ElevatorConstants.intermediatePos);
+    }
+
     public Command setPosition(double position) {
         return new Command() {
             Timer timer = new Timer();
@@ -82,7 +104,9 @@ public class Elevator extends SubsystemBase {
 
             @Override
             public boolean isFinished() {
-                return timer.get() > 1.0;
+                // Change this to something better
+                // return pivotMotor.getMotorOutputStatus().getValue().value != 3;
+                return timer.get() > 1;
             }
         };
     }
@@ -90,5 +114,14 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos", pivotMotor.getPosition().getValueAsDouble() - this.zeroPos);
+        SmartDashboard.putString("Elevator Motor Output", pivotMotor.getMotorOutputStatus().toString());
+
+        // if(this.joystick.getAsDouble() > 0.05) {
+        //     pivotMotor.set(0.1);
+        // } else if(this.joystick.getAsDouble() < -0.05) {
+        //     pivotMotor.set(-0.1);
+        // } else {
+        //     pivotMotor.stopMotor();
+        // }
     }
 }

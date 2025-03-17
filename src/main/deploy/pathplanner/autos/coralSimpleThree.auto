@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LevelTwo"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "simplePath"
+            "pathName": "coralThreeStart"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LevelOne"
+            "name": "coralOut"
           }
         }
       ]

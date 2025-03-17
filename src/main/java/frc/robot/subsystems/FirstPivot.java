@@ -30,19 +30,21 @@ public class FirstPivot extends SubsystemBase {
 
     public void configMotor() {
         pivotMotor.clearStickyFaults();
-        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         config.Slot0.kP = 3.5;
         config.Slot0.kD = 0.05;
-        config.Slot0.kI = 15.0;
+        config.Slot0.kI = 5.0;
         config.Slot0.kG = 0;
 
         var motionMagicConfigs = config.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = 40;
         motionMagicConfigs.MotionMagicAcceleration = 80;
         motionMagicConfigs.MotionMagicJerk = 800;
+
+        var motorOutputConfigs = config.MotorOutput;
+        motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
@@ -68,7 +70,6 @@ public class FirstPivot extends SubsystemBase {
             Timer timer = new Timer();
             @Override
             public void initialize() {
-                // TODO Auto-generated method stub
                 super.initialize();
                 timer.start();
             }
@@ -88,5 +89,6 @@ public class FirstPivot extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("First Pivot Pos", pivotMotor.getPosition().getValueAsDouble() - this.zeroPos);
+        SmartDashboard.putNumber("First Pivot Zero", this.zeroPos);
     }
 }
